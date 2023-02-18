@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sprite: {fileID: 1560545533, guid: 6fce35f301d97e94894d9e33de14762a, type: 3}
   unlocked: 1
-  cost: 5
+  cost: 1

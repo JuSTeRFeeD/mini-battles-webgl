@@ -36,7 +36,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 68029604364288
-    m_Localized: You will spend {coins} coins?
+    m_Localized: You will spend {coins} coins
     m_Metadata:
       m_Items:
       - rid: 2974004210237440106

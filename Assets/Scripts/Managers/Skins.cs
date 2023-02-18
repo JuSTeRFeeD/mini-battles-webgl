@@ -18,6 +18,22 @@ namespace Managers
         private void Start()
         {
             SkinItems = Resources.LoadAll<SkinItem>("SkinItems");
+            Sort();
+        }
+        
+        public void Sort()
+        {
+            for (var i = 1; i < SkinItems.Length; i++)
+            {
+                var j = i;
+                var item = SkinItems[i]; // 1 0
+                while (j > 0 && (item.cost < SkinItems[j - 1].cost || item.unlocked && !SkinItems[j - 1].unlocked))
+                {
+                    (SkinItems[j - 1], SkinItems[j]) = (SkinItems[j], SkinItems[j - 1]);
+                    j--;
+                }
+                SkinItems[j] = item;
+            }
         }
 
         public Sprite GetPlayerSkin(PlayerNum playerNum)

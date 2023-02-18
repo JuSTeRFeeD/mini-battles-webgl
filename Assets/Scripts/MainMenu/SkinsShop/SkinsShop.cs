@@ -19,7 +19,6 @@ namespace MainMenu.SkinsShop
         public LocalizedString notEnoughCoins;
         public LocalizedString whoWillWear;
         public LocalizedString youWillSpendCoins;
-        public int coins;
         public LocalizedString buy;
         public LocalizedString player;
 
@@ -30,6 +29,7 @@ namespace MainMenu.SkinsShop
         {
             var id = 0;
             _shopItems = new SkinShopItem[_skins.SkinItems.Length];
+          
             foreach (var i in _skins.SkinItems)
             {
                 var item = Instantiate(skinShopItemPrefab, container);
