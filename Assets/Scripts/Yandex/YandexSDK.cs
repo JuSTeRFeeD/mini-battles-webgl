@@ -9,18 +9,12 @@ namespace Yandex
     {
         private void Start() => transform.parent = null;
 
-        #region Variables
-        // TEST
-        public TextMeshProUGUI deviceType;
-        // TEST
         public YandexDeviceType CurrentDeviceType { get; private set; } =
             #if DEBUG
                 YandexDeviceType.Mobile;
             #else 
                 YandexDeviceType.Desktop;
             #endif
-        
-#endregion
         
 #region __Internal
     
@@ -50,9 +44,6 @@ namespace Yandex
                 "mobile" => YandexDeviceType.Mobile,
                 _ => YandexDeviceType.Mobile
             };
-                    
-            // todo del
-            deviceType.text = "Device: " + CurrentDeviceType;
         }
 #endregion
     }

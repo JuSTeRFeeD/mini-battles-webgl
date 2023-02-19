@@ -1217,17 +1217,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4106276239400263262, guid: aefafd013e54f624baadc5c302398d34, type: 3}
   m_PrefabInstance: {fileID: 448879128}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &448879130 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4106276239656853614, guid: aefafd013e54f624baadc5c302398d34, type: 3}
-  m_PrefabInstance: {fileID: 448879128}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &540614396
 GameObject:
   m_ObjectHideFlags: 0
@@ -1824,10 +1813,6 @@ PrefabInstance:
       propertyPath: scoreToWin
       value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: 7454167817807150545, guid: 9dadd86412dc1474494dc51819a4f639, type: 3}
-      propertyPath: announcerText
-      value: 
-      objectReference: {fileID: 448879130}
     - target: {fileID: 7454167817807150545, guid: 9dadd86412dc1474494dc51819a4f639, type: 3}
       propertyPath: timerBeforeStart
       value: 

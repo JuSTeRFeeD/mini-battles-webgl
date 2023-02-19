@@ -22,8 +22,8 @@ namespace Managers
         public UnityAction RoundUpdate;
 
         [SerializeField] private TextMeshProUGUI announcerText;
-        [SerializeField] private Vector3 timerScale = new (0.5f, 0.5f, 1);
-        private Vector3 _initAnnouncerScale;
+        private readonly  Vector3 _minAnnouncerScale = new (0.5f, 0.5f, 1);
+        private readonly Vector3 _maxAnnouncerScale = new (4, 4, 1);
         
         [Header("Sounds")]
         [SerializeField] private AudioSource audioSource;
@@ -47,12 +47,18 @@ namespace Managers
         }
 
         public UnityAction<bool> OnGamePauseChange;
+        
+        private Sequence _sequence;
 
         private void Start()
         {
             IsGamePaused = true;
-            _initAnnouncerScale = announcerText.transform.localScale;
             StartTimer();
+        }
+        
+        private void OnDestroy()
+        {
+            _sequence.Kill();
         }
 
         private void StartTimer()
@@ -63,37 +69,38 @@ namespace Managers
         // before level start
         private IEnumerator StartTimerAnnouncer()
         {
-            audioSource.pitch = 1f;
+            announcerText.transform.DOScale(Vector3.zero, 0);
+
             var delay = new WaitForSeconds(1);
             yield return delay;
-        
-            announcerText.transform.localScale = _initAnnouncerScale;
-            announcerText.transform.DOScale(timerScale, 1f).SetEase(Ease.InOutExpo);
-            announcerText.text = "3";
-            audioSource.PlayOneShot(tickBeforeStart);
-            yield return delay;
+            
+            _sequence = DOTween.Sequence()
+                .Append(announcerText.transform.DOScale(_maxAnnouncerScale, .1f))
+                .Append(announcerText.transform.DOScale(_minAnnouncerScale, .9f))
+                .SetLoops(3)
+                ;
 
-            announcerText.transform.localScale = _initAnnouncerScale;
-            announcerText.transform.DOScale(timerScale, 1f).SetEase(Ease.InOutExpo);;
-            announcerText.text = "2";
-            audioSource.PlayOneShot(tickBeforeStart);
-            yield return delay;
-        
-            announcerText.transform.localScale = _initAnnouncerScale;
-            announcerText.transform.DOScale(timerScale, 1f).SetEase(Ease.InOutExpo);;
-            announcerText.text = "1";
-            audioSource.PlayOneShot(tickBeforeStart);
-            yield return delay;
-        
-            announcerText.transform.localScale = _initAnnouncerScale;
-            announcerText.transform.DOScale(Vector3.zero, 1f).SetEase(Ease.InOutExpo);;
+            for (var i = 3; i > 0; i--)
+            {
+                announcerText.text = i.ToString();
+                audioSource.PlayOneShot(tickBeforeStart);
+                yield return delay;
+            }
+
+            _sequence = DOTween.Sequence()
+                .Append(announcerText.transform.DOScale(_maxAnnouncerScale, .1f))
+                .Append(announcerText.transform.DOScale(Vector3.zero, .9f));
+
             announcerText.text = $"<color=yellow>{goLocal.GetLocalizedString()}!";
             audioSource.pitch = 1.5f;
             audioSource.PlayOneShot(tickBeforeStart);
+            
+            yield return delay;
             IsGamePaused = false;
+            _sequence.Kill();
         }
 
-        // score after player win
+        /// Score after player win
         private IEnumerator PlayerWinAnnouncer(PlayerNum playerNum)
         {
             audioSource.PlayOneShot(tickBeforeStart);
@@ -109,9 +116,15 @@ namespace Managers
             }
 
             announcerText.text = sb.ToString();
-            announcerText.transform.localScale = _initAnnouncerScale * 4f;
-            announcerText.transform.DOScale(_initAnnouncerScale, .5f).SetEase(Ease.InOutExpo);;
+            announcerText.transform.localScale = _maxAnnouncerScale * 4f;
+            
+            _sequence = DOTween.Sequence()
+                .Append(announcerText.transform.DOScale(_maxAnnouncerScale, .5f))
+                .SetEase(Ease.InOutExpo);
+            
             yield return new WaitForSeconds(2f);
+            
+            _sequence.Kill();
             CheckWin();
         }
         
@@ -124,10 +137,15 @@ namespace Managers
             sb.Append($"<size=100%>{winLocal.GetLocalizedString()}\n");
 
             announcerText.text = sb.ToString();
-            announcerText.transform.localScale = _initAnnouncerScale * 4f;
-            announcerText.transform.DOScale(_initAnnouncerScale, .5f).SetEase(Ease.InOutExpo);;
+            announcerText.transform.localScale = _maxAnnouncerScale * 4f;
+            
+            _sequence = DOTween.Sequence()
+                .Append(announcerText.transform.DOScale(_maxAnnouncerScale, .5f))
+                .SetEase(Ease.InOutExpo);
+            
             yield return new WaitForSeconds(5f);
-            TempToMainMenu();
+            
+            ToMainMenu();
         }
         
         public void PlayerFinished(PlayerData playerData)
@@ -173,7 +191,7 @@ namespace Managers
             StartCoroutine(nameof(EndGameAnnouncer), playerNum);
         }
     
-        public void TempToMainMenu()
+        public void ToMainMenu()
         {
             _sceneLoader.LoadScene("MainMenu");
         }
