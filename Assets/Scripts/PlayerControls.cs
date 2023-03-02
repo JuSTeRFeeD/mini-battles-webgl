@@ -6,12 +6,11 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using Yandex;
-using Zenject;
+using YandexProvider.Device;
+using DeviceType = YandexProvider.Device.DeviceType;
 
-public class PlayerControls : MonoBehaviour, IPointerClickHandler
+public class PlayerControls : MonoBehaviour, IPointerDownHandler
 {
-    [Inject] private YandexSDK _yandexSDK;
     public PlayerNum playerNum = PlayerNum.Player1;
 
     public enum InputMode
@@ -28,13 +27,18 @@ public class PlayerControls : MonoBehaviour, IPointerClickHandler
 
     public UnityAction SingleButtonPressed;
 
+    private DeviceType _deviceType = DeviceType.Mobile;
+
     private void Start()
     {
-        singleButtonParams.container.gameObject.SetActive(_yandexSDK.CurrentDeviceType == YandexDeviceType.Desktop);
-        singleButtonParams.halfScreenImageMobile.enabled = _yandexSDK.CurrentDeviceType == YandexDeviceType.Mobile;
-        singleButtonParams.mobileAnimationButton.enabled = _yandexSDK.CurrentDeviceType == YandexDeviceType.Mobile;
+        #if !DEBUG
+        _deviceType = Device.Type;
+        #endif
+        singleButtonParams.container.gameObject.SetActive(_deviceType == DeviceType.Desktop);
+        singleButtonParams.halfScreenImageMobile.enabled = _deviceType == DeviceType.Mobile;
+        singleButtonParams.mobileAnimationButton.enabled = _deviceType == DeviceType.Mobile;
 
-        if (_yandexSDK.CurrentDeviceType == YandexDeviceType.Mobile)
+        if (_deviceType == DeviceType.Mobile)
         {
             InitInputMobile();
             return;
@@ -47,13 +51,15 @@ public class PlayerControls : MonoBehaviour, IPointerClickHandler
         if (inputMode == InputMode.SingleButton)
         {
             var sequence = DOTween.Sequence();
-            singleButtonParams.mobileAnimationButton.transform.localScale = Vector3.zero;
-            const float scaleDuration = 0.65f;
+            var minScale = Vector3.one * 3;
+            var maxScale = Vector3.one * 6;
+            singleButtonParams.mobileAnimationButton.transform.localScale = minScale;
+            const float scaleDuration = 0.5f;
             sequence
                 .SetDelay(0.5f)
-                .Append(singleButtonParams.mobileAnimationButton.transform.DOScale(Vector3.one * 3f, scaleDuration))
-                .Append(singleButtonParams.mobileAnimationButton.transform.DOScale(Vector3.zero, scaleDuration))
-                .Append(singleButtonParams.mobileAnimationButton.transform.DOScale(Vector3.one * 3f, scaleDuration))
+                .Append(singleButtonParams.mobileAnimationButton.transform.DOScale(maxScale, scaleDuration))
+                .Append(singleButtonParams.mobileAnimationButton.transform.DOScale(minScale, scaleDuration))
+                .Append(singleButtonParams.mobileAnimationButton.transform.DOScale(maxScale, scaleDuration))
                 .Append(singleButtonParams.mobileAnimationButton.transform.DOScale(Vector3.zero, scaleDuration));
         }
     }
@@ -88,7 +94,7 @@ public class PlayerControls : MonoBehaviour, IPointerClickHandler
 
     private void SingleButtonInput()
     {
-        if (_yandexSDK.CurrentDeviceType == YandexDeviceType.Desktop && 
+        if (_deviceType == DeviceType.Desktop && 
             Input.GetKeyDown(playerNum == PlayerNum.Player1 ? KeyCode.D : KeyCode.L))
         {
             SingleButtonPressed?.Invoke();
@@ -96,9 +102,9 @@ public class PlayerControls : MonoBehaviour, IPointerClickHandler
         }
     }
 
-    public void OnPointerClick(PointerEventData eventData)
+    public void OnPointerDown(PointerEventData eventData)
     {
-        if (_yandexSDK.CurrentDeviceType == YandexDeviceType.Mobile)
+        if (_deviceType == DeviceType.Mobile)
         {
             SingleButtonPressed?.Invoke();
         }

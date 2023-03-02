@@ -1,4 +1,5 @@
 using Managers;
+using PlayerSave;
 using UnityEngine;
 using UnityEngine.Localization;
 using UnityEngine.Localization.SmartFormat.PersistentVariables;
@@ -24,16 +25,36 @@ namespace MainMenu.SkinsShop
 
         private SkinShopItem[] _shopItems;
         private int _index;
+
+        private bool[] _openedSkins;
         
         private void Start()
         {
+            LoadSkins();
+            _skins.OnSkinsUnlockUpdate += LoadSkins;
+        }
+
+        private void LoadSkins()
+        {
+            var loadedSkins = _skins.SkinItems;
+            
+            if (_shopItems != null)
+            {
+                for (var i = 0; i < _shopItems.Length; i++)
+                {
+                    _shopItems[i].UpdateItem(loadedSkins[i]);
+                }
+                return;
+            }
+            
             var id = 0;
             _shopItems = new SkinShopItem[_skins.SkinItems.Length];
-          
-            foreach (var i in _skins.SkinItems)
+            _openedSkins = new bool[loadedSkins.Length];
+            foreach (var i in loadedSkins)
             {
                 var item = Instantiate(skinShopItemPrefab, container);
                 _shopItems[id] = item;
+                _openedSkins[id] = i.unlocked;
                 item.Init(this, id++);
                 item.UpdateItem(i);
             }
@@ -54,7 +75,7 @@ namespace MainMenu.SkinsShop
             }
             else
             {
-                youWillSpendCoins.Add("coins", new IntVariable { Value = _skins.SkinItems[_index].cost});
+                youWillSpendCoins.Add("coins", new IntVariable { Value = _skins.SkinItems[_index].cost });
                 confirmPanel.Show(buy.GetLocalizedString(), "", youWillSpendCoins.GetLocalizedString());
                 confirmPanel.FirstButtonClick += BuySkin;
             }
@@ -67,11 +88,12 @@ namespace MainMenu.SkinsShop
             {
                 _skins.SkinItems[_index].unlocked = true;
                 _shopItems[_index].UpdateItem(_skins.SkinItems[_index]);
-                // TODO [SDK]: save
+                
+                SaveUnlockedSkin(_index);
             }
             confirmPanel.Hide();
         }
-
+        
         private void ToSetSkin()
         {
             confirmPanel.FirstButtonClick += EquipSkinToFirstPlayer;
@@ -84,16 +106,39 @@ namespace MainMenu.SkinsShop
 
         private void EquipSkinToFirstPlayer()
         {
-            _skins.SetSkinForPlayer(PlayerNum.Player1, _index);     
-            confirmPanel.Hide();
+            if (_index != _skins.FirstPlayerSkin)
+            {
+                _skins.SetSkinForPlayer(PlayerNum.Player1, _index);     
+                SaveEquippedSkins();
+            }
             confirmPanel.FirstButtonClick -= EquipSkinToFirstPlayer;
+            confirmPanel.Hide();
+
         }
         
         private void EquipSkinToSecondPlayer()
         {
-            _skins.SetSkinForPlayer(PlayerNum.Player2, _index);
-            confirmPanel.Hide();
+            if (_index != _skins.SecondPlayerSkin)
+            {
+                _skins.SetSkinForPlayer(PlayerNum.Player2, _index);
+                SaveEquippedSkins();
+            }
             confirmPanel.SecondButtonClick -= EquipSkinToFirstPlayer;
+            confirmPanel.Hide();
+        }
+        
+        private void SaveUnlockedSkin(int index)
+        {
+            _openedSkins[index] = true;
+            SaveAndLoad.Data.openedSkins = _openedSkins;
+            SaveAndLoad.Save();
+        }
+
+        private void SaveEquippedSkins()
+        {
+            SaveAndLoad.Data.firstPlayerSkin = _skins.FirstPlayerSkin;
+            SaveAndLoad.Data.secondPlayerSkin = _skins.SecondPlayerSkin;
+            SaveAndLoad.Save();
         }
     }
 }

@@ -1,5 +1,6 @@
-using System;
 using UnityEngine.Events;
+using System;
+using PlayerSave;
 
 namespace Managers
 {
@@ -10,6 +11,11 @@ namespace Managers
         public int SecondPlayerScore { get; private set; }
 
         public UnityAction CoinsUpdate;
+
+        public PlayersScore()
+        {
+            SaveAndLoad.OnDataUpdate += () => Coins = SaveAndLoad.Data.coins;
+        }
 
         public void AddScoreToPlayer(PlayerNum playerNum)
         {
@@ -30,6 +36,7 @@ namespace Managers
         {
             Coins += amount;
             CoinsUpdate?.Invoke();
+            SaveCoins();
         }
 
         public bool SpendCoins(int amount)
@@ -37,7 +44,14 @@ namespace Managers
             if (amount > Coins) return false;
             Coins -= amount;
             CoinsUpdate?.Invoke();
+            SaveCoins();
             return true;
+        }
+
+        private void SaveCoins()
+        {
+            SaveAndLoad.Data.coins = Coins;
+            SaveAndLoad.Save();
         }
     }
 }

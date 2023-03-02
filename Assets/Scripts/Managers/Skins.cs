@@ -1,4 +1,5 @@
 using System;
+using PlayerSave;
 using Scriptable;
 using UnityEngine;
 using UnityEngine.Events;
@@ -9,25 +10,39 @@ namespace Managers
     {
         public SkinItem[] SkinItems { get; private set; }
 
-        // TODO [SDK]: preload selected skin
-        private int _firstPlayerSkin = 0;
-        private int _secondPlayerSkin = 1;
+        public int FirstPlayerSkin { get; private set; }
+        public int SecondPlayerSkin { get; private set; }
 
-        public UnityAction PlayersSkinUpdate;
+        public UnityAction OnPlayersSkinUpdate;
+        public UnityAction OnSkinsUnlockUpdate;
 
-        private void Start()
+        private void Awake()
         {
             SkinItems = Resources.LoadAll<SkinItem>("SkinItems");
-            Sort();
+            SortSkinsByPrice();
+            SaveAndLoad.OnDataUpdate += SetupBySaveData;
         }
-        
-        public void Sort()
+
+        private void SetupBySaveData()
+        {
+            SetSkinForPlayer(PlayerNum.Player1, SaveAndLoad.Data.firstPlayerSkin);
+            SetSkinForPlayer(PlayerNum.Player2, SaveAndLoad.Data.secondPlayerSkin);
+
+            var opened = SaveAndLoad.Data.openedSkins;
+            for (var i = 0; i < opened.Length; i++)
+            {
+                SkinItems[i].unlocked = opened[i];
+            }
+            OnSkinsUnlockUpdate?.Invoke();
+        }
+
+        private void SortSkinsByPrice()
         {
             for (var i = 1; i < SkinItems.Length; i++)
             {
                 var j = i;
-                var item = SkinItems[i]; // 1 0
-                while (j > 0 && (item.cost < SkinItems[j - 1].cost || item.unlocked && !SkinItems[j - 1].unlocked))
+                var item = SkinItems[i];
+                while (j > 0 && (item.cost < SkinItems[j - 1].cost))
                 {
                     (SkinItems[j - 1], SkinItems[j]) = (SkinItems[j], SkinItems[j - 1]);
                     j--;
@@ -40,8 +55,8 @@ namespace Managers
         {
             return playerNum switch
             {
-                PlayerNum.Player1 => SkinItems[_firstPlayerSkin].sprite,
-                PlayerNum.Player2 => SkinItems[_secondPlayerSkin].sprite,
+                PlayerNum.Player1 => SkinItems[FirstPlayerSkin].sprite,
+                PlayerNum.Player2 => SkinItems[SecondPlayerSkin].sprite,
                 _ => SkinItems[0].sprite
             };
         }
@@ -52,15 +67,17 @@ namespace Managers
             switch (playerNum)
             {
                 case PlayerNum.Player1:
-                    _firstPlayerSkin = skinIdx;
+                    if (FirstPlayerSkin == skinIdx) return;
+                    FirstPlayerSkin = skinIdx;
                     break;
                 case PlayerNum.Player2:
-                    _secondPlayerSkin = skinIdx;
+                    if (SecondPlayerSkin == skinIdx) return;
+                    SecondPlayerSkin = skinIdx;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(playerNum), playerNum, null);
             }
-            PlayersSkinUpdate?.Invoke();
+            OnPlayersSkinUpdate?.Invoke();
         }
     }
 }

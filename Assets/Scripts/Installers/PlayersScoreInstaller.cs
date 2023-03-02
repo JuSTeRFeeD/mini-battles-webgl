@@ -7,7 +7,8 @@ namespace Installers
     {
         public override void InstallBindings()
         {
-            Container.Bind<PlayersScore>().FromInstance(new PlayersScore()).AsSingle();
+            var score = new PlayersScore();
+            Container.Bind<PlayersScore>().FromInstance(score).AsSingle().NonLazy();
         }
     }
 }

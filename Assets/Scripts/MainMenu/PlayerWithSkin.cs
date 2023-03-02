@@ -1,4 +1,3 @@
-using System;
 using Managers;
 using UnityEngine;
 using Zenject;
@@ -14,12 +13,12 @@ namespace MainMenu
         private void Start()
         {
             UpdateSkin();
-            _skins.PlayersSkinUpdate += UpdateSkin;
+            _skins.OnPlayersSkinUpdate += UpdateSkin;
         }
 
         private void OnDestroy()
         {
-            _skins.PlayersSkinUpdate -= UpdateSkin;
+            _skins.OnPlayersSkinUpdate -= UpdateSkin;
         }
 
         private void UpdateSkin()

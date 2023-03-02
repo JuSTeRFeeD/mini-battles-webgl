@@ -93,7 +93,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7576810719959369458}
-  - component: {fileID: 7576810719959369457}
+  - component: {fileID: 5730804213058139129}
   - component: {fileID: 2463321793259260108}
   - component: {fileID: 7576810719959369468}
   - component: {fileID: 7576810719959369459}
@@ -120,8 +120,8 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!58 &7576810719959369457
-CircleCollider2D:
+--- !u!70 &5730804213058139129
+CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -133,9 +133,9 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.4439562, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.16489524
+  m_Offset: {x: 0.22182631, y: -4.00373e-16}
+  m_Size: {x: 0.8041159, y: 0.29082826}
+  m_Direction: 1
 --- !u!58 &2463321793259260108
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -186,5 +186,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   solidCollider: {fileID: 2463321793259260108}
-  triggerCollider: {fileID: 7576810719959369457}
+  triggerCollider: {fileID: 5730804213058139129}
   rb: {fileID: 7576810719959369468}

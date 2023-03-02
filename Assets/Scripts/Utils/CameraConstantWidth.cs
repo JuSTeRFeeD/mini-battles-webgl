@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
+
 namespace Utils
 {
     public class CameraConstantWidth : MonoBehaviour
     {
+        public float minSize = 0;
         public Vector2 defaultResolution = new (1920, 1080);
         [Range(0f, 1f)] public float widthOrHeight = .5f;
 
@@ -25,12 +27,13 @@ namespace Utils
             _horizontalFov = CalcVerticalFov(_initialFov, 1 / _targetAspect);
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
             if (_componentCamera.orthographic)
             {
                 var constantWidthSize = _initialSize * (_targetAspect / _componentCamera.aspect);
-                _componentCamera.orthographicSize = Mathf.Lerp(constantWidthSize, _initialSize, widthOrHeight);
+                var size = Mathf.Lerp(constantWidthSize, _initialSize, widthOrHeight);
+                _componentCamera.orthographicSize = size < minSize ? minSize : size;
             }
             else
             {

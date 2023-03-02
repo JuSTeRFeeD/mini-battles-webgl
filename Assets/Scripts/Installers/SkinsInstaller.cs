@@ -10,7 +10,7 @@ namespace Installers
         
         public override void InstallBindings()
         {
-            Container.Bind<Skins>().FromInstance(skins).AsSingle();
+            Container.Bind<Skins>().FromInstance(skins).AsSingle().NonLazy();
         }
     }
 }

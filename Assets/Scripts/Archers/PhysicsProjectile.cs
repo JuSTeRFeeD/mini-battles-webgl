@@ -4,8 +4,8 @@ namespace Archers
 {
     public class PhysicsProjectile : MonoBehaviour
     {
-        [SerializeField] private CircleCollider2D solidCollider;
-        [SerializeField] private CircleCollider2D triggerCollider;
+        [SerializeField] private Collider2D solidCollider;
+        [SerializeField] private Collider2D triggerCollider;
         [SerializeField] private Rigidbody2D rb;
 
         private bool _isStopped;

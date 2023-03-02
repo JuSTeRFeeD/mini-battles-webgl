@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Localization;
+using YandexProvider.Advertising;
 using Zenject;
 
 namespace Managers
@@ -145,6 +146,9 @@ namespace Managers
             
             yield return new WaitForSeconds(5f);
             
+#if !DEBUG
+            InterstitialAd.Show();
+#endif
             ToMainMenu();
         }
         

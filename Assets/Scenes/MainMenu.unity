@@ -836,7 +836,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 158689591}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -5.75, y: 0.5, z: 0}
+  m_LocalPosition: {x: -6, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1503,15 +1503,15 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 143ece1d1df75dc44a00c00c966ed08e, type: 3}
+  m_Sprite: {fileID: 1567230939, guid: 6fce35f301d97e94894d9e33de14762a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 3.125, y: 3.125}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &366587207
@@ -1599,7 +1599,7 @@ RectTransform:
   m_Pivot: {x: 1, y: 0.5}
 --- !u!95 &383955537
 Animator:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -1616,7 +1616,7 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
 --- !u!114 &383955538
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2203,9 +2203,6 @@ MonoBehaviour:
     rgba: 4281152948
   musicBgImg: {fileID: 425785430}
   sfxBgImg: {fileID: 2016480361}
-  musicVolumeBond: -15
-  sfxVolumeBond: -10
-  mixer: {fileID: 24300002, guid: 00bcf411a942d9544bdf878baadf9080, type: 2}
 --- !u!1 &498435525
 GameObject:
   m_ObjectHideFlags: 0
@@ -3723,7 +3720,7 @@ Camera:
   m_AllowMSAA: 1
   m_AllowDynamicResolution: 0
   m_ForceIntoRT: 0
-  m_OcclusionCulling: 1
+  m_OcclusionCulling: 0
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
 --- !u!4 &963194228
@@ -3753,6 +3750,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b73f997255714dfc943c281bda0d7a0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  minSize: 0
   defaultResolution: {x: 1920, y: 1080}
   widthOrHeight: 0.5
 --- !u!1 &1001186551
@@ -6533,7 +6531,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1721437845}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4.25, y: 0.5, z: 0}
+  m_LocalPosition: {x: -4.5, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7182,6 +7180,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 484030163}
+        m_TargetAssemblyTypeName: MainMenu.SettingsPanel, Assembly-CSharp
+        m_MethodName: SaveSettings
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 1227300284}
         m_TargetAssemblyTypeName: MainMenu.PanelsManager, Assembly-CSharp
         m_MethodName: ToPanel
@@ -7900,15 +7910,15 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 143ece1d1df75dc44a00c00c966ed08e, type: 3}
+  m_Sprite: {fileID: 1567230939, guid: 6fce35f301d97e94894d9e33de14762a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 3.125, y: 3.125}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &1981981786
